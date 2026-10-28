@@ -24,6 +24,11 @@ class Settings(BaseSettings):
         return self.app_env.lower() in ("production", "prod")
 
     @property
+    def is_database_configured(self) -> bool:
+        url = self.database_url or os.getenv("DATABASE_URL", "")
+        return bool(url.strip())
+
+    @property
     def resolved_database_url(self) -> str:
         url = self.database_url or os.getenv("DATABASE_URL", "")
         if url:
@@ -32,11 +37,10 @@ class Settings(BaseSettings):
                 url = url.replace("postgres://", "postgresql://", 1)
             return url
 
-        # If production and no database url is specified, fail explicitly as required
         if self.is_production:
-            raise ValueError(
-                "DATABASE_URL must be set in production. EcoSort requires a hosted PostgreSQL database (e.g. Neon or Supabase)."
-            )
+            # Use temporary in-memory SQLite so container starts up cleanly,
+            # while health endpoints report degraded database status until DATABASE_URL is set
+            return "sqlite:///:memory:"
 
         # Development fallback
         return "sqlite:///./ecosort_dev.db"

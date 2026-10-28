@@ -10,6 +10,16 @@ router = APIRouter(prefix="/api", tags=["Health"])
 
 @router.get("/health")
 def health_check(db: Session = Depends(get_db)):
+    if not settings.is_database_configured and settings.is_production:
+        return {
+            "status": "degraded",
+            "service": settings.app_name,
+            "version": settings.app_version,
+            "environment": settings.app_env,
+            "database": "unconfigured: DATABASE_URL environment variable is required in production. Please set your Neon/Supabase PostgreSQL connection string in Vercel project settings.",
+            "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat()
+        }
+
     db_status = "connected"
     try:
         db.execute(text("SELECT 1"))
