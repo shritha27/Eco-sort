@@ -1,6 +1,18 @@
 {
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "https://backend-pi-eight-36.vercel.app/api/$1"
+    },
+    {
+      "source": "/docs",
+      "destination": "https://backend-pi-eight-36.vercel.app/docs"
+    },
+    {
+      "source": "/openapi.json",
+      "destination": "https://backend-pi-eight-36.vercel.app/openapi.json"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
