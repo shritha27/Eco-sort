@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-warmwhite text-slate-800 antialiased font-sans min-h-screen selection:bg-forest-200 selection:text-forest-900;
+  }
+}
+
+/* Subtle transitions and printable bin label styles */
+@media print {
+  body {
+    background: white !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+}
