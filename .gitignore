@@ -38,7 +38,12 @@ wheels/
 
 # Environment variables
 .env
-.env.production
+.env.*
+!.env.example
+*.env
+
+# Vercel
+.vercel/
 
 # IDEs
 .vscode/
